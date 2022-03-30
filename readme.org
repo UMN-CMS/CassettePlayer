@@ -1,5 +1,54 @@
 #+LATEX_HEADER: \makeatletter\@ifclassloaded{beamer}{}{\usepackage[margin=1in]{geometry}}\makeatother
-#+OPTIONS: toc:nil 
+#+OPTIONS: toc:1
 
-* Cassette Player
+* CassettePlayer
+CassettePlayer is a tool designed to help in the assembly of the cassettes for the CMS HGCAL upgrade.
+
+** Whats in this Repository
+Right now this repository contains everything related to cassette player.
+This includes:
+- The main CassettePlayer App
+- Tools for generating instruction files
+- Tools for generating geometry and shape information
+- Tools for getting wiring paths
+- Presentations and data related to this project. 
+
+
+* Getting up and running
+
+CassettePlayer is primarily a gui app, build using the [[https://www.wxwidgets.org/][wxWidgets]] framework.
+wxWidgets is crossplatform and this application should compile on Mac, Linux, and Windows.
+
+*Warning:* This app is in development, there may be bugs.
+*Warning:* Due to changes in Mac's font handling, you may need version 3.1.5 of the library to run on mac. 
+
+
+** Requirements
+*** Compiler and Build Tools
+You must use a c++17 compatible compiler, and a CMake version greater than 3.14.
+
+*** External:
+- [[https://www.wxwidgets.org/][wxWidgets]], can be installed from the website, or using a package manager
+
+*** Built in
+These requirements will be downloaded automatically by CMake.
+- [[https://github.com/gabime/spdlog][Spdlog]], used for logging
+- [[https://fmt.dev/latest/index.html][fmt]], for string formatting
+- [[https://uscilab.github.io/cereal/][cereal]], for serialization 
+- [[https://github.com/d99kris/rapidcsv][rapidcsv]], for parsing csv files in the external tools
+ 
+** Building
+Building CassettePlayer and the tools should be as simple as running 2 commands
+#+begin_src sh
+cmake -B build -DCMAKE_BUILD_TYPE=RELEASE
+make -j4 -C build
+#+end_src
+
+The main app and all tools should then be compiled into the appropriate directories in the build folder.
+Please switch to debug mode for development, by changing RELEASE to DEBUG.
+
+
+
+
+
 
