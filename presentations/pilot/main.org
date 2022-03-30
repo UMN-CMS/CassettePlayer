@@ -1,0 +1,92 @@
+#+TITLE: A Tool For Cassette Assembly
+#+PROPERTY: DIR MainStorage
+#+AUTHOR: Charlie Kapsiak (UMN CMS)
+#+STARTUP: beamer
+#+OPTIONS: H:1 toc:nil
+#+COLUMNS: %45ITEM %10BEAMER_ENV(Env) %10BEAMER_ACT(Act) %4BEAMER_COL(Col)
+#+LATEX_HEADER: \usepackage{umnslides}
+
+* Cassette Assembly
+Even once all designs have been finalized, assembling the hundreds of cassettes for the CMS HGCAL upgrade will be a long and challenging task.
+Throughout the process, the assemblers will need to:
+
+- Keep a record of which components have been placed where, through the use of barcodes.
+- Identify and use a large variety of different, but often similar components, like wagons.
+
+Perhaps this procedure can be made more efficient through software. 
+
+* Goal
+Create a prototype of an application with the following goals:
+# #+ATTR_BEAMER: :overlay <+->
+- Ease the logistical work in the cassette assembly process, such as keeping track of part IDs
+- Maintain a robust record of the assembly process
+- Be sufficiently flexible that cassette assembly experts can create the workflows they want with minimal effort
+  
+* Workflow Description: Pre-Assembly
+- Describe the geometry of each cassette, specifically component locations and orientations, as well as connections and dependencies between components.
+  This step can be largely automated.
+- Describe the desired assembly process as a series of instructions.
+
+  
+* Workflow Description: Assembly
+- Open application and begin assembly.
+- Instruction files can be created such that any physically possible operation is accepted, for maximum assembler discretion.
+- When placing unique component, one scan records the location and barcode information.
+- Visualize the current assembly, next components, etc
+- Generate a complete record of the assembly process, with minimal effort on the part of the assemblers.
+
+* Workflow Description: Post-Assembly
+- Access to a complete record of the assembly process
+- Exact record of where each component was placed, for later use in a database.
+
+  
+* What it is not
+- The application is not a design a tool
+- The application does not decide anything about the assembly process
+- The application is agnostic to the exact structure of the cassette, and to the process of assembly. Experts alone must decide how to assemble the cassette and encode this information (possibly with the help of built in tools).
+
+* Workflow In Action
+** Select Instruction                                            
+:PROPERTIES:
+:BEAMER_env: onlyenv
+:BEAMER_ACT: <1>
+:END:
+Select instruction
+#+ATTR_LATEX: :width \textwidth
+[[file:data/mainview.png]]
+
+** Scan Barcode
+:PROPERTIES:
+:BEAMER_env: onlyenv
+:BEAMER_ACT: <2>
+:END:
+Scan Barcode
+#+ATTR_LATEX: :width \textwidth
+[[file:data/scan1.png]]
+** Fully Recorded                                               
+:PROPERTIES:
+:BEAMER_env: onlyenv
+:BEAMER_ACT: <3>
+:END:
+Fully Recorded
+#+ATTR_LATEX: :width \textwidth
+[[file:data/scan2.png]]
+
+
+* Visualization Frame                                   
+#+ATTR_LATEX: :width \textwidth
+[[file:data/vis.png]]
+
+
+* More Visualization                                   
+
+#+ATTR_LATEX: :width \textwidth
+[[file:data/filled.png]]
+
+* Questions and Comments
+\Huge\center Questions and Comments?
+
+
+
+
+

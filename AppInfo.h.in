@@ -1,0 +1,3 @@
+// the configured options and settings for Tutorial
+#define App_VERSION_MAJOR @App_VERSION_MAJOR@
+#define App_VERSION_MINOR @App_VERSION_MINOR@

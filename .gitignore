@@ -1,0 +1,9 @@
+build/
+external/*
+!external/CMakeLists.txt
+!external/rapidcsv/
+*.tex
+**/:
+**/;
+**/*.html
+**/*.pdf

@@ -1,0 +1,39 @@
+#+LATEX_HEADER: \makeatletter\@ifclassloaded{beamer}{}{\usepackage[margin=1in]{geometry}}\makeatother
+#+OPTIONS: toc:nil 
+
+* Jeremy Comments:
+- [ ] At a minmum, 50% of your slides should have images.  The long series of text-only slides is tedious and will result in people's attention drifting.
+- [ ] You need to hit harder at the beginning of the talk about the challenge of assembling a cassette.  Perhaps a photo of Karol's mockup would be useful, and highlight the key steps You wouldn't show how to do this in the early slide, just show that its a challenge.:
+  - [ ] Place the array of modules, of the right types (e.g. 300um and 200um modules look identical...) and at the right orientations
+  - [ ] Place the wiring which would be blocked by the wagons
+  - [ ] Pick the right wagons, join them to their engines and place the assembly
+  - [ ] Place deported DC/DC converters
+  - [ ] Wire everything to the periphery
+- [ ] Title is perhaps too broad.  "A Tool for Cassette Assembly Workflow" is sufficient, since you are talking in a cassette meeting.
+- [ ] First 'view' of the software should show a full cassette, then click in to show the work.
+- [ ] Barcode should be consistent with the actual plan
+- [ ] How does the display visualize the following:
+  - [ ] difference between placed and unplaced module.  Suggest unplaced module could have dashed boundary?
+  - [ ] Suggest to highlight 'clicked on' module in yellow
+  - [ ] Difference between different types of full module (200 um versus 300um)
+- [ ] Show phase of module placement and wagon+engine placement separately.
+- [ ] Concentrator mezzanine needs to be more realistic --> 36 mm x 76 mm
+- [ ] Engine should be more-realistic.  Shape here is complex, I can send the gerber for extracting corners if you need.
+- [ ] Details window should be simplified -- we need to think from the point of view of folks who frankly don't like thinking in terms of numbers... 
+- [ ] Need realistic wagons.  This is a joint topic with Devin.
+
+** More features which we should talk about:
+    (a) Deported DC/DC -- this should be pretty straightforward to include and draw.  This should be another 'layer' .
+    (b) Visualization of the HD.  We should at least draw them.  We have some ideas on how to do this.
+    (c) Visualization of cabling.  This one can be a special 'hardcoded' example.
+
+* Comments
+ - Assemble -> Mount
+ - Upgrade descriptions of instructions
+ - Different colors for FO,FM,FI
+ - Instruction -> Step
+ - Wiring
+   - Peripheral->DCDC
+   - DDCDC -> HD
+   - DCDC->Engine or partial
+   - 

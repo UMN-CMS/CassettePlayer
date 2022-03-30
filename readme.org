@@ -1,0 +1,5 @@
+#+LATEX_HEADER: \makeatletter\@ifclassloaded{beamer}{}{\usepackage[margin=1in]{geometry}}\makeatother
+#+OPTIONS: toc:nil 
+
+* Cassette Player
+
