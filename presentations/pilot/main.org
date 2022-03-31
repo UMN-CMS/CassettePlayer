@@ -5,45 +5,186 @@
 #+OPTIONS: H:1 toc:nil
 #+COLUMNS: %45ITEM %10BEAMER_ENV(Env) %10BEAMER_ACT(Act) %4BEAMER_COL(Col)
 #+LATEX_HEADER: \usepackage{umnslides}
+#+LATEX_HEADER:  \setbeamercovered{transparent=50}
+
 
 * Cassette Assembly
+
 Even once all designs have been finalized, assembling the hundreds of cassettes for the CMS HGCAL upgrade will be a long and challenging task.
-Throughout the process, the assemblers will need to:
 
-- Keep a record of which components have been placed where, through the use of barcodes.
-- Identify and use a large variety of different, but often similar components, like wagons.
+#+ATTR_LATEX: :width 0.6\textwidth
+[[file:data/wholething.png]]
 
-Perhaps this procedure can be made more efficient through software. 
+** Challenges                                                    :B_overbox:
+:PROPERTIES:
+:BEAMER_env: overbox
+:BEAMER_ACT: <2>
+:END:
+There will be substantial challenges, both physical and logistical.
+
+
+* Logistical Challenges
+** Logistical
+:PROPERTIES:
+:BEAMER_ACT: <1->
+:BEAMER_COL: 0.5
+:END:
+- Keep a record of which components have been placed where, through the use of bar codes.
+- Track the current state of the assembly from day to day.
+- Verify the integrity of each Cassette throughout the process.
+** Images
+:PROPERTIES:
+:BEAMER_ACT: <1->
+:BEAMER_COL: 0.5
+:END:
+[[file:data/furniture.jpg]]
+
+
+
+
+* Physical Challenges
+** Physical
+:PROPERTIES:
+:BEAMER_COL: 0.5
+:END:
+#+ATTR_BEAMER: :overlay <+->
+- Mount thousands of modules of distinct types, and ensure the correct shape and width is always chosen
+- Place deported DCDC converters on the correct modules.
+- Identify and use a large variety of different, but often similar components, like wagons and wires
+- Run wires and piping correctly through complex paths to the periphery or to the HD region.
+
+** Images
+:PROPERTIES:
+:BEAMER_COL: 0.5
+:END:
+*** Modules                                                     :B_onlyenv:
+:PROPERTIES:
+:BEAMER_ACT: <1>
+:BEAMER_env: onlyenv
+:END:
+#+ATTR_LATEX: :width 0.9\textwidth
+[[file:data/table.png]]
+*** DCDC                                                        :B_onlyenv:
+:PROPERTIES:
+:BEAMER_ACT: <2>
+:BEAMER_env: onlyenv
+:END:
+[[file:data/oneplate.png]]
+*** Wires                                                       :B_onlyenv:
+:PROPERTIES:
+:BEAMER_ACT: <3>
+:BEAMER_env: onlyenv
+:END:
+[[file:data/lotsawires.png]]
+*** Connections                                                 :B_onlyenv:
+:PROPERTIES:
+:BEAMER_ACT: <4>
+:BEAMER_env: onlyenv
+:END:
+[[file:data/conns.png]]
+
+
+* Challenges
+** Physical
+:PROPERTIES:
+:BEAMER_COL: 0.5
+:END:
+Physical
+#+ATTR_BEAMER: :overlay <1>
+ #+include: main.org::Physical :only-contents t
+** Logistical
+:PROPERTIES:
+:BEAMER_COL: 0.5
+:END:
+Logistical
+#+ATTR_BEAMER: :overlay <1>
+ #+include: main.org::Logistical :only-contents t
+
+** The Goal                                                      :B_overbox:
+:PROPERTIES:
+:BEAMER_env: overbox
+:BEAMER_ACT: <2>
+:END:
+Perhaps software can help make some of the tedious aspects of this process more efficient.
+
 
 * Goal
 Create a prototype of an application with the following goals:
-# #+ATTR_BEAMER: :overlay <+->
+#+ATTR_BEAMER: :overlay <+->
 - Ease the logistical work in the cassette assembly process, such as keeping track of part IDs
 - Maintain a robust record of the assembly process
 - Be sufficiently flexible that cassette assembly experts can create the workflows they want with minimal effort
+
+
+* CassettePlayer
+
+** Info
+:PROPERTIES:
+:BEAMER_ACT: <2>
+:BEAMER_env: onlyenv
+:END:
+- Highly flexible assembly helper and visualizer. 
+- Helps with logistical and basic assembly tasks when needed, but be unobtrusive to those who will be doing the actual assembly.
+
+** Images                                                        :B_onlyenv:
+:PROPERTIES:
+:BEAMER_ACT: <1>
+:BEAMER_env: onlyenv
+:END:
+#+ATTR_LATEX: :width 0.9\textwidth
+[[file:data/vis.png]]
+
+** Images                                                        :B_onlyenv:
+:PROPERTIES:
+:BEAMER_ACT: <2>
+:BEAMER_env: onlyenv
+:END:
+#+ATTR_LATEX: :width 0.5\textwidth
+
+*** Visualization
+:PROPERTIES:
+:BEAMER_COL: 0.5
+:END:
+[[file:data/vis.png]]
+  
+*** Information View
+:PROPERTIES:
+:BEAMER_COL: 0.5
+:END:
+[[file:data/mainview.png]]
   
 * Workflow Description: Pre-Assembly
 - Describe the geometry of each cassette, specifically component locations and orientations, as well as connections and dependencies between components.
   This step can be largely automated.
-- Describe the desired assembly process as a series of instructions.
+- Describe the desired assembly process as a series of instructions. 
+  [[file:data/oneeightydeg.png]]
 
   
 * Workflow Description: Assembly
+
+** Work
+:PROPERTIES:
+:BEAMER_COL: 0.6
+:END:
+#+ATTR_BEAMER: :overlay <+>
 - Open application and begin assembly.
 - Instruction files can be created such that any physically possible operation is accepted, for maximum assembler discretion.
 - When placing unique component, one scan records the location and barcode information.
 - Visualize the current assembly, next components, etc
 - Generate a complete record of the assembly process, with minimal effort on the part of the assemblers.
 
+** Image
+:PROPERTIES:
+:BEAMER_COL: 0.4
+:END:
+[[file:data/vis.png]]
+[[file:data/mainview.png]]
+
+
 * Workflow Description: Post-Assembly
 - Access to a complete record of the assembly process
 - Exact record of where each component was placed, for later use in a database.
 
-  
-* What it is not
-- The application is not a design a tool
-- The application does not decide anything about the assembly process
-- The application is agnostic to the exact structure of the cassette, and to the process of assembly. Experts alone must decide how to assemble the cassette and encode this information (possibly with the help of built in tools).
 
 * Workflow In Action
 ** Select Instruction                                            
@@ -73,15 +214,23 @@ Fully Recorded
 [[file:data/scan2.png]]
 
 
-* Visualization Frame                                   
-#+ATTR_LATEX: :width \textwidth
-[[file:data/vis.png]]
+
+* What it is not
+- The application is not a design a tool
+- The application does not decide anything about the assembly process
+- The application is agnostic to the exact structure of the cassette, and to the process of assembly. Experts alone must decide how to assemble the cassette and encode this information (possibly with the help of built in tools).
+
+* Development
+CassettePlayer is early in development, and needs input from those who would use it to make it as useful as possible.
+
+** Feedback
+- Changes to the desired workflow?
+- Modifications to the application?
+- Additional intermediate tools needed?
 
 
-* More Visualization                                   
-
-#+ATTR_LATEX: :width \textwidth
-[[file:data/filled.png]]
+* References
+Majority of images taken from Karol Ralacz's talk on HGCAL integration. 
 
 * Questions and Comments
 \Huge\center Questions and Comments?
