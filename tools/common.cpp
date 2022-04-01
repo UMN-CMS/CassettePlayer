@@ -38,9 +38,9 @@ std::vector<Row> extractRows(const std::string& file) {
     GET_COLF(isEngine, bool, [](const std::string& in, bool& b) {
         b = (in.find('T') != std::string::npos);
     });
-    // GET_COLF(isDepDCDC, bool, [](const std::string& in, bool& b) {
-    //     b = (in.find('T') != std::string::npos);
-    // });
+     GET_COLF(isDepDCDC, bool, [](const std::string& in, bool& b) {
+         b = (in.find('T') != std::string::npos);
+     });
     GET_COL(u, int);
     GET_COL(v, int);
     GET_COL(plane, std::size_t);
@@ -67,7 +67,7 @@ std::vector<Row> extractRows(const std::string& file) {
         r.irot = irot[i];
         r.mrot = mrot[i];
         r.wag_name = WagonName[i];
-        //   r.dep_dcdc = isDepDCDC[i];
+        r.dep_dcdc = isDepDCDC[i];
 
         for (int j = 0; j < nvertices[i]; ++j) {
             r.vertices.push_back(Point({vx[j][i], vy[j][i]}));
@@ -255,22 +255,19 @@ void processWagons(std::unordered_map<CasSlot, PositionInfo>& ret, Channel& c) {
                 row.u, row.v, SlotCassette({row.plane, row.icas_0, row.icas_1}),
                 row.itype);
             auto& eng = c.eng[this_mod];
-            int rotfactor = -1;
+            int rotfactor = 1;
             PositionInfo pos_of_mod = ret[eng.left];
             PositionInfo pos_of_eng = ret[eng.right];
             PositionInfo realpos;
 
             auto diff = rotfactor * (pos_of_eng.p - pos_of_mod.p);
 
-            if (row.wag_name[0] == 'E' && row.wag_name.find("2") != std::string::npos)
-                realpos.p = pos_of_eng.p - diff;
-            else if (row.wag_name.find("E_")  != std::string::npos)
                 realpos = pos_of_eng;
-            else if (row.wag_name.find("W_")  != std::string::npos)
+            if (row.wag_name[0] == 'E' && row.wag_name.find("2") != std::string::npos)
+              realpos.p = pos_of_mod.p - diff  ;
+            else if (row.wag_name.find("E")  != std::string::npos)
                 realpos = pos_of_mod;
-            else if (row.wag_name[0] == 'W')
-                realpos = pos_of_mod;
-            else if (row.wag_name[0] == 'E')
+            else if (row.wag_name.find("W")  != std::string::npos)
                 realpos = pos_of_eng;
             auto point =
                 PositionInfo(realpos.p, std::atan(diff.second / diff.first));

@@ -15,27 +15,31 @@ EVT_CHAR(VisualizationCanvas::OnKey)
 EVT_MOUSE_EVENTS(VisualizationCanvas::OnMouse)
 END_EVENT_TABLE()
 
-std::unordered_map<LayerKeyType, std::function<bool(DrawableCasElement*)>>
+std::vector<std::pair<LayerKeyType, std::function<bool(DrawableCasElement*)>>> 
 createMap() {
-    std::unordered_map<LayerKeyType, std::function<bool(DrawableCasElement*)>>
-        ret;
+    std::vector<std::pair<LayerKeyType, std::function<bool(DrawableCasElement*)>>> ret;
 
-    ret["Wagon"] = [](const DrawableCasElement* d) {
+    ret.push_back({"Wagon",  [](const DrawableCasElement* d) {
         return d->cas_slot.isType<SlotWagon>();
-    };
-    ret["Engine"] = [](const DrawableCasElement* d) {
+    }});
+    ret.push_back({"Engine",  [](const DrawableCasElement* d) {
         return d->cas_slot.isType<SlotEngine>();
-    };
-    ret["Deported DCDC"] = [](const DrawableCasElement* d) {
+    }});
+    ret.push_back({"Deported DCDC",  [](const DrawableCasElement* d) {
         return d->cas_slot.isType<SlotDepDCDC>();
-    };
-    ret["Other Types"] = [](const DrawableCasElement* d) {
+    }});
+    ret.push_back({"Other Types",  [](const DrawableCasElement* d) {
         return d->cas_slot.isType<SlotNull>();
-    };
-    ret["Module"] = [](const DrawableCasElement* d) {
+    }});
+    ret.push_back({"Module",  [](const DrawableCasElement* d) {
         return d->cas_slot.isType<SlotModule>();
-    };
+    }});
     return ret;
+}
+
+template<typename T>
+auto getFromPair(const std::string& s, T&& cont){
+  return std::find_if(cont.begin(), cont.end(), [&](auto&& x){return s == x.first;})->second;
 }
 
 VisualizationCanvas::VisualizationCanvas(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size )
@@ -182,7 +186,7 @@ void VisualizationCanvas::centerOnCenter() {
 void VisualizationCanvas::applyCurrentLayers() {
     for (const auto& p : arrangement) {
         if (!p.second) {
-            filterIf(id_map[p.first]);
+          filterIf(getFromPair(p.first, id_map));
         }
     }
 }
@@ -190,7 +194,7 @@ void VisualizationCanvas::orderLayers() {
     for (const auto& p : arrangement) {
         std::stable_partition(
             drawn_elements.begin(), drawn_elements.end(),
-            [this, &p](auto&& x) { return this->id_map[p.first](x.first); });
+            [this, &p](auto&& x) { return getFromPair(p.first, this->id_map)(x.first); });
     }
 }
 void VisualizationCanvas::setArrangment(

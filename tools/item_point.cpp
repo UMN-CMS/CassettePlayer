@@ -24,7 +24,8 @@
 std::unordered_map<std::string, Color> COLOR{
     {"OMODULE", 0x8000FF}, {"MMODULE", 0x6000FF}, {"IMODULE", 0x2000FF},
     {"ENGINE", 0xE000FF},  {"CON_MEZ", 0x1269FF}, {"DCDC", 0x12690F},
-    {"WAGON", 0xAAAA00}};
+    {"WAGON", 0xAAAA00}, {"DEP_DCDC", 0xE000AF}
+};
 
 std::unordered_map<std::string, PointVec> wagon_shapes = {
     {"West3",
@@ -107,7 +108,7 @@ std::unordered_map<std::string, PointVec> wagon_shapes = {
       {6.1, -6.76},
       {26.1, -6.76},
       {36.5, 3.0}}},
-    {"W_Triangle", {{53.3, 3.0},        {163.14, 3.0},      {173.54, -6.76},
+    {"E_Triangle", {{53.3, 3.0},        {163.14, 3.0},      {173.54, -6.76},
                   {193.54, -6.76},    {203.94, 3.0},      {220.74, 3.0},
                   {220.74, 43.0},     {163.14, 43.0},     {53.3, 43.0},
                   {-65.7, 43.0},      {-65.7, 32.2},      {-69.08, 27.0},
@@ -117,7 +118,7 @@ std::unordered_map<std::string, PointVec> wagon_shapes = {
                   {62.872, -114.897}, {54.472, -100.348}, {-5.196, 3.0},
                   {-4.3, 3.0},        {6.1, -6.76},       {26.1, -6.76},
                   {36.5, 3.0}}},
-    {"E_Hockey", {{65.7, 3.0},         {65.7, 13.8},        {69.08, 19.0},
+    {"W_Hockey", {{65.7, 3.0},         {65.7, 13.8},        {69.08, 19.0},
                 {69.08, 27.0},       {65.7, 32.2},        {65.7, 43.0},
                 {-4.3, 43.0},        {-4.3, 3.0},         {19.831, -120.348},
                 {48.631, -170.231},  {103.551, -265.355}, {132.351, -315.238},
@@ -296,12 +297,20 @@ std::unordered_map<CasSlot, Drawable> parseShapes(
                                             },
                                             square),
                                         COLOR["ENGINE"]}})});
+    ret.insert({SlotDepDCDC(),
+                Drawable({StyledPolygon{applyTo(
+                                            [](const auto& x) {
+                                                return Point(x.first * 1,
+                                                             x.second * 1);
+                                            },
+                                            d_dcdctri),
+                                        COLOR["DEP_DCDC"]}})});
     for (const auto& pair : wagon_shapes) {
         spdlog::debug("Makin shape : {}", pair.first);
         int rot = 1;
         if (pair.first.find("East") != std::string::npos || 
             pair.first.find("West") != std::string::npos
-            ) rot = -1;
+            ) rot = 1;
         ret.insert({SlotWagon(SlotEngine(), pair.first, 0, 0),
                     Drawable({StyledPolygon(applyTo(
                                                 [rot](const auto& x) {

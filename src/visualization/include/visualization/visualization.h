@@ -70,7 +70,7 @@ class VisualizationCanvas : public wxPanel {
         return d.first;
     }
 
-    std::unordered_map<LayerKeyType, std::function<bool(DrawableCasElement*)>>
+  std::vector<std::pair<LayerKeyType, std::function<bool(DrawableCasElement*)>>>
         id_map;
     std::vector<std::pair<LayerKeyType, bool>> arrangement;
 
