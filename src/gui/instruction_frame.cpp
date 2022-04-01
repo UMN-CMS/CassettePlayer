@@ -432,7 +432,7 @@ void InstructionFrame::onNextInstruction(wxCommandEvent& WXUNUSED(e)) {}
 void InstructionFrame::onViewSubassembly(wxCommandEvent& WXUNUSED(e)) {
     auto subassembly_dialog =
         new wxDialog(this, wxID_ANY, "Subassembly", wxDefaultPosition,
-                     wxSize(300,200));
+                     wxSize(500,300), wxRESIZE_BORDER | wxDEFAULT_DIALOG_STYLE);
 
     auto subview = new VisualizationCanvas(subassembly_dialog);
 
@@ -440,7 +440,7 @@ void InstructionFrame::onViewSubassembly(wxCommandEvent& WXUNUSED(e)) {
     Instruction* cur_ins = toInstruction(instructions->GetCurrentItem());
     spdlog::debug("Selected instruction at {}", (void*)cur_ins);
     if (!cur_ins) return;
-    subview->frozen = true;
+    subview->frozen = false;
     subview->draw_mouse_pos = false;
     subview->mouse_or_center = false;
     //    subview->setAngle(dm->getRenderAngleForCas());
