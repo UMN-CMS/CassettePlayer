@@ -19,6 +19,7 @@ struct Row {
     int icas_0, icas_1;
     bool is_engine;
     int MB;
+  bool dep_dcdc = false;
     std::string wag_name;
 };
 

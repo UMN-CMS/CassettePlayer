@@ -19,20 +19,21 @@ std::unordered_map<LayerKeyType, std::function<bool(DrawableCasElement*)>>
 createMap() {
     std::unordered_map<LayerKeyType, std::function<bool(DrawableCasElement*)>>
         ret;
+
+    ret["Wagon"] = [](const DrawableCasElement* d) {
+        return d->cas_slot.isType<SlotWagon>();
+    };
+    ret["Engine"] = [](const DrawableCasElement* d) {
+        return d->cas_slot.isType<SlotEngine>();
+    };
+    ret["Deported DCDC"] = [](const DrawableCasElement* d) {
+        return d->cas_slot.isType<SlotDepDCDC>();
+    };
     ret["Other Types"] = [](const DrawableCasElement* d) {
         return d->cas_slot.isType<SlotNull>();
     };
     ret["Module"] = [](const DrawableCasElement* d) {
         return d->cas_slot.isType<SlotModule>();
-    };
-    ret["Engine"] = [](const DrawableCasElement* d) {
-        return d->cas_slot.isType<SlotEngine>();
-    };
-    ret["Wagon"] = [](const DrawableCasElement* d) {
-        return d->cas_slot.isType<SlotWagon>();
-    };
-    ret["Deported DCDC"] = [](const DrawableCasElement* d) {
-        return d->cas_slot.isType<SlotDepDCDC>();
     };
     return ret;
 }

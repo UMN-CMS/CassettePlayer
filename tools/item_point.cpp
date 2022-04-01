@@ -299,7 +299,9 @@ std::unordered_map<CasSlot, Drawable> parseShapes(
     for (const auto& pair : wagon_shapes) {
         spdlog::debug("Makin shape : {}", pair.first);
         int rot = 1;
-        //if (pair.first.find("Tri") != std::string::npos) rot = 1;
+        if (pair.first.find("East") != std::string::npos || 
+            pair.first.find("West") != std::string::npos
+            ) rot = -1;
         ret.insert({SlotWagon(SlotEngine(), pair.first, 0, 0),
                     Drawable({StyledPolygon(applyTo(
                                                 [rot](const auto& x) {

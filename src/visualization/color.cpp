@@ -3,5 +3,5 @@
 #include "config/config.h"
 
 void Color::getColorPtrFromName(Configuration* c) {
-    if (is_named) real_color = c->getColor(color_name);
+  //    if (is_named) real_color = c->getColor(color_name);
 }
