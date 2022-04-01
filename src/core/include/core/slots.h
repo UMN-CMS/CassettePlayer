@@ -178,8 +178,8 @@ struct SlotCassette {
 
 struct SlotModule {
     std::string toString() const {
-        return fmt::format("Module type {} at ({},{}) for Cassette {},", u, v,
-                           cas.toString(), type);
+        return fmt::format("Module type {} at ({},{}) for Cassette {},", type,
+                           u, v, cas.toString());
     }
     int u = 0, v = 0;
     SlotCassette cas;
@@ -211,13 +211,18 @@ struct SlotModule {
     }
     static constexpr bool is_distinct = true;
 };
-//This is bad
+// This is bad
 struct SlotNull {
     std::string toString() const { return fmt::format("Nullslot"); }
-  bool operator==(const SlotNull& other) const { (void)other; return true; }
+    bool operator==(const SlotNull& other) const {
+        (void)other;
+        return true;
+    }
     SlotCassette::PlaneID getCassette() const { return {-1, -1, -1}; }
     template <class Archive>
-    void serialize(Archive& archive) {(void)archive;}
+    void serialize(Archive& archive) {
+        (void)archive;
+    }
 
     HASHABLE(0);
 };
@@ -282,7 +287,8 @@ struct SlotScrews {
 
 struct SlotWagon {
     std::string toString() const {
-        return fmt::format("Wagon from engine {}", eng.toString());
+        return fmt::format("Wagon type {} from engine {}", type,
+                           eng.toString());
     }
     SlotEngine eng;
     std::string type = "";
@@ -295,8 +301,8 @@ struct SlotWagon {
     SlotWagon(SlotEngine e, std::string t, int lr, int orient)
         : eng{e}, type{std::move(t)}, leftright{lr}, orientation{orient} {}
     bool operator==(const SlotWagon& w1) const {
-        return std::tie(eng, leftright, orientation) ==
-               std::tie(w1.eng, w1.leftright, w1.orientation);
+        return std::tie(eng, type, leftright, orientation) ==
+               std::tie(w1.eng, w1.type, w1.leftright, w1.orientation);
     }
     HASHABLE(eng, type, leftright, orientation)
     template <class Archive>

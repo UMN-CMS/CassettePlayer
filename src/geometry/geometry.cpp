@@ -24,6 +24,7 @@ bool CasVisManager::loadComponentLibrary(const std::string& fname) {
     comp_file_name = fname;
     spdlog::debug("Successfully {} components from file {}",
                   std::size(component_library), fname);
+
     return true;
 }
 
@@ -48,6 +49,7 @@ bool CasVisManager::constructVisMap(Configuration* c) {
         "Constructing visualization map using location file {} and component "
         "library {}.",
         comp_file_name, loc_file_name);
+
     for (const auto& pair : location_library) {
         auto found = std::find_if(
             component_library.begin(), component_library.end(),
@@ -56,8 +58,16 @@ bool CasVisManager::constructVisMap(Configuration* c) {
             spdlog::error(
                 "Requested shape of component that does not exist for {}",
                 pair.first.toString());
+            for (const auto& p : component_library) {
+                spdlog::error("{} and {} are same type: {}", p.first.toString(),
+                              pair.first.toString(),
+                              pair.first.isSameType(p.first));
+            }
             continue;
-        };
+        } else {
+            spdlog::debug("Found shape for component {}",
+                          pair.first.toString());
+        }
         //        spdlog::debug("Requested shape of component {} found",
         //                      pair.first.toString());
         auto drawable =

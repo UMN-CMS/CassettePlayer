@@ -4,9 +4,10 @@
 #include <vector>
 
 #include "core/slots.h"
-#include "vmath/vmath.h"
 #include "rapidcsv.h"
 #include "spdlog/spdlog.h"
+#include "vmath/vmath.h"
+
 
 struct Row {
     int u, v, plane;
@@ -18,6 +19,7 @@ struct Row {
     int icas_0, icas_1;
     bool is_engine;
     int MB;
+    std::string wag_name;
 };
 
 std::vector<Row> extractRows(const std::string& file);
@@ -26,7 +28,7 @@ struct Channel {
     const std::vector<Row>& rows;
     std::vector<SlotCassette> cass;
     std::vector<SlotModule> mods;
-    std::vector<SlotEngine> eng;
+    std::unordered_map<SlotModule, SlotEngine> eng;
 };
 
 void processCassettes(std::unordered_map<CasSlot, PositionInfo>& ret,
@@ -89,7 +91,7 @@ int getThreeWithAngleLess(const Vec& v, int l) {
     });
 }
 
-template<typename T>
+template <typename T>
 T orthDirection(const T& p) {
     Point p2 = {-p.second, p.first};
     p2 = p2 / norm(p2);

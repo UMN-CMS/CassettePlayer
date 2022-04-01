@@ -73,7 +73,7 @@ void StyledPolygon::draw(DrawCanvasType* gc, const VisualizationOptions& g,
     long penstyle = wxPENSTYLE_SOLID;
     long brushstyle = wxBRUSHSTYLE_SOLID;
     if (g.respect_present && !d.present) {
-        penstyle = wxPENSTYLE_LONG_DASH;
+        penstyle = wxPENSTYLE_SHORT_DASH;
         brushstyle=  wxBRUSHSTYLE_SOLID;
         auto newcolor =
             wxColour(color.r(), color.g(), color.b(), color.a() / 1.2);

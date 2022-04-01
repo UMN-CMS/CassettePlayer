@@ -41,6 +41,7 @@ std::vector<Row> extractRows(const std::string& file) {
     GET_COL(u, int);
     GET_COL(v, int);
     GET_COL(plane, std::size_t);
+    GET_COL(WagonName, std::string);
 
     GET_COL(itype, std::string);
 
@@ -62,6 +63,8 @@ std::vector<Row> extractRows(const std::string& file) {
         r.itype = itype[i];
         r.irot = irot[i];
         r.mrot = mrot[i];
+        r.wag_name = WagonName[i];
+
         for (int j = 0; j < nvertices[i]; ++j) {
             r.vertices.push_back(Point({vx[j][i], vy[j][i]}));
         }
@@ -122,7 +125,11 @@ void processModules(std::unordered_map<CasSlot, PositionInfo>& ret,
             }
         }
         if (row.itype.find("b") != std::string::npos) {
-            angle = 2 * 3.1415 * (row.irot + 3) / 6;
+            if (row.itype.find("e") != std::string::npos) {
+                angle = 2 * 3.1415 * (row.irot - 2) / 6;
+            } else {
+                angle = 2 * 3.1415 * (row.irot + 3) / 6;
+            }
         }
         if (row.itype.find("c") != std::string::npos) {
             angle = 2 * 3.1415 * (row.irot - 1) / 6;
@@ -227,20 +234,34 @@ void processEngines(std::unordered_map<CasSlot, PositionInfo>& ret,
             //            module with location
             //            ({},{})", point.x(),
             //                          point.y());
-            c.eng.push_back(SlotEngine(m, slot_temp));
+            c.eng.insert({m, SlotEngine(m, slot_temp)});
+            c.eng.insert({slot_temp, SlotEngine(m, slot_temp)});
             ret.insert({SlotEngine(m, slot_temp), point});
         }
     }
 }
 
 void processWagons(std::unordered_map<CasSlot, PositionInfo>& ret, Channel& c) {
-    for (const SlotEngine& e : c.eng) {
-        PositionInfo pos_of_mod = ret[e.left];
-        PositionInfo pos_of_eng = ret[e.right];
-        auto diff = -(pos_of_eng.p - pos_of_mod.p);
-        auto point =
-            PositionInfo(pos_of_eng.p, std::atan(diff.second / diff.first));
-        ret.insert({SlotWagon(e, "wag", 0, 0), point});
+    for (const Row& row : c.rows) {
+        if (!row.wag_name.empty()) {
+            auto this_mod = SlotModule(
+                row.u, row.v, SlotCassette({row.plane, row.icas_0, row.icas_1}),
+                row.itype);
+            auto& eng = c.eng[this_mod];
+            int rotfactor = -1;
+            PositionInfo pos_of_mod = ret[eng.left];
+            PositionInfo pos_of_eng = ret[eng.right];
+            PositionInfo realpos;
+            if (row.wag_name[0] == 'E')
+                realpos = pos_of_mod;
+            else if (row.wag_name[0] == 'W')
+                realpos = pos_of_eng;
+
+            auto diff = rotfactor * (pos_of_eng.p - pos_of_mod.p);
+            auto point =
+                PositionInfo(realpos.p, std::atan(diff.second / diff.first));
+            ret.insert({SlotWagon(eng, row.wag_name, 0, 0), point});
+        }
     }
 }
 
@@ -250,7 +271,7 @@ std::unordered_map<CasSlot, PositionInfo> parsePos(
     std::vector<SlotModule> found_mods;
     int i = 0;
     spdlog::debug("Processed {} lines", i);
-    Channel c{rows, {}, {},{}};
+    Channel c{rows, {}, {}, {}};
     processCassettes(ret, c);
     processModules(ret, c);
     processEngines(ret, c);

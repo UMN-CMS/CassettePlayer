@@ -230,7 +230,7 @@ CassettePlayer is early in development, and needs input from those who would use
 
 
 * References
-Majority of images taken from Karol Ralacz's talk on HGCAL integration. 
+Majority of images taken from Karol Rapacz's talk on HGCAL integration. 
 
 * Questions and Comments
 \Huge\center Questions and Comments?
