@@ -75,16 +75,22 @@ void StyledPolygon::draw(DrawCanvasType* gc, const VisualizationOptions& g,
     if (g.respect_present && !d.present) {
         penstyle = wxPENSTYLE_DOT;
         brushstyle=  wxBRUSHSTYLE_SOLID;
-        auto newcolor =
-            wxColour(color.r(), color.g(), color.b(), color.a() / 1.2);
+        unsigned char r,g,b;
+        r = color.r();
+        g = color.g();
+        b = color.b();
+        wxColor::MakeGrey(&r,&g, &b);
+        auto newcolor = wxColour(r,g,b);
+        newcolor = wxColour(color.r(), color.g(), color.b(), color.a()/2);
         gc->SetBrush(wxBrush(newcolor, brushstyle));
     } else {
       gc->SetBrush(wxBrush(c, brushstyle));
     }
 
     if (g.is_selected) {
-        gc->SetPen(wxPen(*wxBLUE, line_width, penstyle));
-        gc->SetBrush(wxBrush(*wxYELLOW, brushstyle));
+        
+        gc->SetPen(wxPen(*wxRED, 5, penstyle));
+        // gc->SetBrush(wxBrush(*wxYELLOW, brushstyle));
     } else {
         gc->SetPen(wxPen(*wxWHITE, line_width, penstyle));
     }
