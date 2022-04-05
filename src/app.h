@@ -12,6 +12,8 @@ class CassetteApp : public wxApp {
 
     // Must exist for the lifetime of the application
     DataManager data_manager;
+
+
     Configuration config;
 
    public:

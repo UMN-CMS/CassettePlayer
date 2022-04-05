@@ -26,18 +26,19 @@ void makeOneCas(CasSlot main_cas, const std::vector<CasSlot>& slots,
         main_cas, OpType::INSERT_COMPONENT, "MainRoot");
     auto modules_root = std::make_shared<Instruction>(
         std::nullopt, OpType::EMPTY, "Place Modules");
-    auto engines_root = std::make_shared<Instruction>(
-        std::nullopt, OpType::EMPTY, "Place Engines");
-    auto wagons_root = std::make_shared<Instruction>(
-        std::nullopt, OpType::EMPTY, "Place Wagons");
+    auto eng_wag_root = std::make_shared<Instruction>(
+        std::nullopt, OpType::EMPTY, "Place Engines and Wagons");
+    auto dcdc_root = std::make_shared<Instruction>(
+        std::nullopt, OpType::EMPTY, "Place Deported DCDC converters");
 
     //    insmgr.instructions.push_back(main_root);
     //    insmgr.instructions.push_back(modules_root);
     //    insmgr.instructions.push_back(engines_root);
     //    insmgr.instructions.push_back(wagons_root);
     insmgr.addChild(main_root, modules_root);
-    insmgr.addChild(main_root, engines_root);
-    insmgr.addChild(main_root, wagons_root);
+    insmgr.addChild(main_root, eng_wag_root);
+    insmgr.addChild(main_root, dcdc_root);
+
     int i = 0;
     for (const CasSlot& slot : slots) {
         ++i;
@@ -60,24 +61,46 @@ void makeOneCas(CasSlot main_cas, const std::vector<CasSlot>& slots,
 
             insmgr.instructions.push_back(p1);
             insmgr.addChild(one_mod, p3);
-            insmgr.addDep(p3,p1);
+            insmgr.addDep(p3, p1);
             // insmgr.instructions.push_back(p2);
             insmgr.instructions.push_back(one_mod);
             insmgr.addChild(modules_root, one_mod);
         }
         if (slot.isType<SlotEngine>()) {
-            SlotEngine relslot = slot.getValue<SlotEngine>();
-            auto p1 = std::make_shared<Instruction>(
-                relslot, OpType::INSERT_COMPONENT, "Insert Engine");
-            insmgr.addChild(engines_root, p1);
-        }
-        if (slot.isType<SlotWagon>()) {
-            SlotWagon relslot = slot.getValue<SlotWagon>();
-            auto p1 = std::make_shared<Instruction>(
-                relslot, OpType::INSERT_COMPONENT, "Insert Wagon");
-            insmgr.addChild(wagons_root, p1);
-        }
+            spdlog::debug("Creating instructions for Engine ");
+            SlotEngine engslot = slot.getValue<SlotEngine>();
+            auto ewag = std::make_shared<Instruction>(
+                engslot, OpType::EMPTY, "Assemble Engine-Wagon system");
+            auto eng = std::make_shared<Instruction>(
+                engslot, OpType::INSERT_COMPONENT, "Retrieve Engine");
 
+            insmgr.addChild(ewag, eng);
+            insmgr.addChild(eng_wag_root, ewag);
+
+            auto getwag = [&](auto&& x) {
+                if (x.template isType<SlotWagon>()) {
+                    SlotWagon relslot = x.template getValue<SlotWagon>();
+                    if (relslot.eng == engslot) {
+                        return true;
+                    }
+                }
+                return false;
+            };
+            auto wag_one_i = std::find_if(slots.begin(), slots.end(), getwag);
+            if (wag_one_i != std::end(slots)) {
+                insmgr.addChild(ewag, std::make_shared<Instruction>(
+                                          *wag_one_i, OpType::INSERT_COMPONENT,
+                                          "Insert {} on to engine"));
+            }
+            auto wag_two_i = std::find_if(
+                (wag_one_i < std::end(slots)) ? wag_one_i+1 : std::end(slots),
+                slots.end(), getwag);
+            if (wag_two_i != std::end(slots)) {
+                insmgr.addChild(ewag, std::make_shared<Instruction>(
+                                          *wag_two_i, OpType::INSERT_COMPONENT,
+                                          "Insert {} on to engine"));
+            }
+        }
         if (i % 1000 == 0) {
             spdlog::debug("Now processing elements {}", i);
         }
