@@ -15,35 +15,42 @@ EVT_CHAR(VisualizationCanvas::OnKey)
 EVT_MOUSE_EVENTS(VisualizationCanvas::OnMouse)
 END_EVENT_TABLE()
 
-std::vector<std::pair<LayerKeyType, std::function<bool(DrawableCasElement*)>>> 
-createMap() {
-    std::vector<std::pair<LayerKeyType, std::function<bool(DrawableCasElement*)>>> ret;
+wxDEFINE_EVENT(VIS_FRAME_LEFT_DOWN, VisualizationClick);
 
-    ret.push_back({"Wagon",  [](const DrawableCasElement* d) {
-        return d->cas_slot.isType<SlotWagon>();
-    }});
-    ret.push_back({"Engine",  [](const DrawableCasElement* d) {
-        return d->cas_slot.isType<SlotEngine>();
-    }});
-    ret.push_back({"Deported DCDC",  [](const DrawableCasElement* d) {
-        return d->cas_slot.isType<SlotDepDCDC>();
-    }});
-    ret.push_back({"Other Types",  [](const DrawableCasElement* d) {
-        return d->cas_slot.isType<SlotNull>();
-    }});
-    ret.push_back({"Module",  [](const DrawableCasElement* d) {
-        return d->cas_slot.isType<SlotModule>();
-    }});
+std::vector<std::pair<LayerKeyType, std::function<bool(DrawableCasElement*)>>>
+createMap() {
+    std::vector<
+        std::pair<LayerKeyType, std::function<bool(DrawableCasElement*)>>>
+        ret;
+
+    ret.push_back({"Wagon", [](const DrawableCasElement* d) {
+                       return d->cas_slot.isType<SlotWagon>();
+                   }});
+    ret.push_back({"Engine", [](const DrawableCasElement* d) {
+                       return d->cas_slot.isType<SlotEngine>();
+                   }});
+    ret.push_back({"Deported DCDC", [](const DrawableCasElement* d) {
+                       return d->cas_slot.isType<SlotDepDCDC>();
+                   }});
+    ret.push_back({"Other Types", [](const DrawableCasElement* d) {
+                       return d->cas_slot.isType<SlotNull>();
+                   }});
+    ret.push_back({"Module", [](const DrawableCasElement* d) {
+                       return d->cas_slot.isType<SlotModule>();
+                   }});
     return ret;
 }
 
-template<typename T>
-auto getFromPair(const std::string& s, T&& cont){
-  return std::find_if(cont.begin(), cont.end(), [&](auto&& x){return s == x.first;})->second;
+template <typename T>
+auto getFromPair(const std::string& s, T&& cont) {
+    return std::find_if(cont.begin(), cont.end(),
+                        [&](auto&& x) { return s == x.first; })
+        ->second;
 }
 
-VisualizationCanvas::VisualizationCanvas(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size )
-: wxPanel(parent, id,  pos, size){
+VisualizationCanvas::VisualizationCanvas(wxWindow* parent, wxWindowID id,
+                                         const wxPoint& pos, const wxSize& size)
+    : wxPanel(parent, id, pos, size) {
     id_map = createMap();
     for (const auto& p : id_map) {
         arrangement.push_back({p.first, true});
@@ -78,9 +85,9 @@ void VisualizationCanvas::render(wxGraphicsContext* gc, wxDC& dc) {
 }
 
 void VisualizationCanvas::OnPaint(wxPaintEvent& WXUNUSED(e)) {
-     wxPaintDC dc(this);
-     auto gc = std::unique_ptr<wxGraphicsContext>(wxGraphicsContext::Create(dc));
-     render(gc.get(), dc);
+    wxPaintDC dc(this);
+    auto gc = std::unique_ptr<wxGraphicsContext>(wxGraphicsContext::Create(dc));
+    render(gc.get(), dc);
 }
 
 wxAffineMatrix2D VisualizationCanvas::getTransformation(
@@ -127,11 +134,16 @@ void VisualizationCanvas::OnMouse(wxMouseEvent& e) {
     if (e.LeftDown()) {
     }
     if (e.LeftUp() && !e.Dragging()) {
+        VisualizationClick event(VIS_FRAME_LEFT_DOWN, GetId(), {cur_x, cur_y});
+        event.SetEventObject(this);
+        wxPostEvent(this,event);
+        spdlog::debug("Left click visualization frame at pos ({},{}) in visframe with id {}", cur_x,
+                      cur_y, GetId());
         auto hits = hit(cur_x, cur_y);
         if (false && std::size(hits) == 1) {
             // hit_dialog.ShowModal();
         } else if (std::size(hits) >= 1) {
-          // auto menu = new wxMenu();
+            // auto menu = new wxMenu();
 
             // PopupMenu(menu);
         }
@@ -186,15 +198,16 @@ void VisualizationCanvas::centerOnCenter() {
 void VisualizationCanvas::applyCurrentLayers() {
     for (const auto& p : arrangement) {
         if (!p.second) {
-          filterIf(getFromPair(p.first, id_map));
+            filterIf(getFromPair(p.first, id_map));
         }
     }
 }
 void VisualizationCanvas::orderLayers() {
     for (const auto& p : arrangement) {
         std::stable_partition(
-            drawn_elements.begin(), drawn_elements.end(),
-            [this, &p](auto&& x) { return getFromPair(p.first, this->id_map)(x.first); });
+            drawn_elements.begin(), drawn_elements.end(), [this, &p](auto&& x) {
+                return getFromPair(p.first, this->id_map)(x.first);
+            });
     }
 }
 void VisualizationCanvas::setArrangment(

@@ -4,15 +4,16 @@
 #include <wx/app.h>
 #include <wx/frame.h>
 
-#include "geometry/geometry.h"
-#include "visualization/visualization.h"
-#include "visualization/drawables.h"
 #include "config/config.h"
+#include "geometry/geometry.h"
+#include "visualization/drawables.h"
+#include "visualization/visualization.h"
 
 class MainFrame : public wxFrame {
     VisualizationCanvas* vc;
-    SlotCassette::PlaneID current_cas = {17, 0, 0};
+    SlotCassette::PlaneID current_cas = {33, 0, 0};
     std::vector<std::unique_ptr<DrawableCasElement>> additions;
+    PointVec current_path;
 
    public:
     CasVisManager* cvm;
@@ -22,27 +23,44 @@ class MainFrame : public wxFrame {
               const wxSize& size = wxSize(1200, 700),
               long style = wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL);
     void initializeGeometry();
+    void drawPath();
+    void onClickVis(VisualizationClick& e);
 };
+
+void MainFrame::onClickVis(VisualizationClick& e) {
+    spdlog::debug("Clicked pos ({},{})", e.pos);
+    current_path.push_back(e.pos);
+    auto temp = StyledPolygon{current_path, 0xFF0000};
+    temp.line_width = 4;
+    if (additions.empty()) {
+        additions.emplace_back(
+            new DrawableCasElement(PositionInfo{{0, 0}, 0}, Drawable({temp})));
+    } else {
+        additions[0] = std::unique_ptr<DrawableCasElement>(
+            new DrawableCasElement(PositionInfo{{0, 0}, 0}, Drawable({temp})));
+    }
+    drawPath();
+}
+
+void MainFrame::drawPath() {
+    std::vector<DrawableCasElement*> to_add;
+    for (const auto& ptr : additions) {
+        to_add.push_back(ptr.get());
+    }
+    vc->addElements(to_add);
+}
 
 MainFrame::MainFrame(CasVisManager* _cvm, wxFrame* parent, wxWindowID id,
                      const wxString& title, const wxPoint& pos,
                      const wxSize& size, long style)
     : wxFrame(parent, id, title, pos, size, style) {
     SetSizeHints(wxDefaultSize, wxDefaultSize);
-    vc = new VisualizationCanvas(this);
+    vc = new VisualizationCanvas(this, 10001);
+    
+    Bind(VIS_FRAME_LEFT_DOWN, &MainFrame::onClickVis, this, 10001);
+
     cvm = _cvm;
     initializeGeometry();
-
-    PointVec pv = {{0, 0}, {100, 100}};
-    auto temp = StyledPolygon{pv, 0xFF0000};
-    temp.line_width=4;
-
-    additions.emplace_back(new DrawableCasElement(PositionInfo{{0, 0}, 0}, Drawable({temp})));
-    std::vector<DrawableCasElement*> to_add;
-    for (const auto& ptr : additions) {
-        to_add.push_back(ptr.get());
-    }
-    vc->addElements(to_add);
 }
 
 void MainFrame::initializeGeometry() {
@@ -72,7 +90,7 @@ class PathMaker : public wxApp {
 };
 
 bool PathMaker::OnInit() {
-    //    spdlog::set_level(spdlog::level::debug);  // Set global log level to
+        spdlog::set_level(spdlog::level::debug);  // Set global log level to
     //    debug
     //  auto console_sink =
     //  std::make_shared<spdlog::sinks::stdout_color_sink_mt>();

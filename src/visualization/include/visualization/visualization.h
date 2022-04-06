@@ -13,6 +13,15 @@
 #include "core/slots.h"
 #include "drawables.h"
 // #include "geometry/vmath.h"
+class VisualizationClick : public wxCommandEvent {
+   public:
+    VisualizationClick(wxEventType eventType, int winid, const Point& pos)
+        : wxCommandEvent(winid, eventType), pos(pos) {}
+    virtual wxEvent* Clone() const { return new VisualizationClick(*this); }
+    const Point pos;
+};
+
+wxDECLARE_EVENT(VIS_FRAME_LEFT_DOWN, VisualizationClick);
 
 enum Layer {
     STATIC = 1 << 0,
@@ -70,7 +79,8 @@ class VisualizationCanvas : public wxPanel {
         return d.first;
     }
 
-  std::vector<std::pair<LayerKeyType, std::function<bool(DrawableCasElement*)>>>
+    std::vector<
+        std::pair<LayerKeyType, std::function<bool(DrawableCasElement*)>>>
         id_map;
     std::vector<std::pair<LayerKeyType, bool>> arrangement;
 
@@ -124,7 +134,9 @@ class VisualizationCanvas : public wxPanel {
 
     //    std::vector<DrawableCasElement*> other;
 
-  VisualizationCanvas(wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos=wxDefaultPosition, const wxSize& size =wxDefaultSize );
+    VisualizationCanvas(wxWindow* parent, wxWindowID id = wxID_ANY,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize);
 
     void OnKey(wxKeyEvent& e);
     void OnMouse(wxMouseEvent& e);
