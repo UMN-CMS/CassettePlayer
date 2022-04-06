@@ -57,7 +57,7 @@ MainFrame::MainFrame(CasVisManager* _cvm, wxFrame* parent, wxWindowID id,
     SetSizeHints(wxDefaultSize, wxDefaultSize);
     vc = new VisualizationCanvas(this, 10001);
     
-    Bind(VIS_FRAME_LEFT_DOWN, &MainFrame::onClickVis, this, 10001);
+    Bind(VIS_FRAME_LEFT_DOWN, &MainFrame::onClickVis, this);
 
     cvm = _cvm;
     initializeGeometry();
