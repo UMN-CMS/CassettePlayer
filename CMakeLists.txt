@@ -11,6 +11,7 @@ endif()
 
 set(JUST_INSTALL_CEREAL True)
 
+set(wxWidgets_USE_DEBUG True)
 
 if (MSVC)
   add_compile_options(/W4 /WX)

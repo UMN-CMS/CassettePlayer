@@ -10,6 +10,7 @@
 #include "drawables.h"
 
 wxDEFINE_EVENT(VIS_FRAME_LEFT_DOWN, VisualizationClick);
+wxDEFINE_EVENT(TESTEVENT,wxCommandEvent);
 
 BEGIN_EVENT_TABLE(VisualizationCanvas, wxPanel)
 EVT_PAINT(VisualizationCanvas::OnPaint)
@@ -53,10 +54,14 @@ VisualizationCanvas::VisualizationCanvas(wxWindow* parent, wxWindowID id,
                                          const wxPoint& pos, const wxSize& size)
     : wxPanel(parent, id, pos, size) {
     id_map = createMap();
-    Bind(VIS_FRAME_LEFT_DOWN, [](VisualizationClick& e){spdlog::debug("Clicked registerd");});
+    Bind(TESTEVENT, [](wxCommandEvent& e){spdlog::debug("Clicked registerd");});
     for (const auto& p : id_map) {
         arrangement.push_back({p.first, true});
     }
+    VisualizationClick event(VIS_FRAME_LEFT_DOWN, GetId(), {0,0});
+        event.SetEventObject(this);
+        bool ok = ProcessWindowEvent(event);
+        spdlog::debug("Processed: {}", ok);
 
 }
 
@@ -103,6 +108,7 @@ wxAffineMatrix2D VisualizationCanvas::getTransformation(
     return mat;
 }
 
+
 void VisualizationCanvas::OnMouse(wxMouseEvent& e) {
     Refresh();
     float cur_x = e.GetX();
@@ -139,7 +145,9 @@ void VisualizationCanvas::OnMouse(wxMouseEvent& e) {
     if (e.LeftUp() && !e.Dragging()) {
         VisualizationClick event(VIS_FRAME_LEFT_DOWN, GetId(), {cur_x, cur_y});
         event.SetEventObject(this);
-        ProcessWindowEvent(event);
+        wxCommandEvent newevent(VIS_FRAME_LEFT_DOWN, GetId());
+        newevent.SetEventObject(this);
+        ProcessWindowEvent(newevent);
         spdlog::debug("Left click visualization frame at pos ({},{}) in visframe with id {}", cur_x,
                       cur_y, GetId());
         auto hits = hit(cur_x, cur_y);

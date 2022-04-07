@@ -16,8 +16,13 @@
 class VisualizationClick : public wxCommandEvent {
    public:
   VisualizationClick(wxEventType eventType, int winid, const Point& _pos)
-        : wxCommandEvent(winid, eventType), pos(_pos) {}
-    virtual wxEvent* Clone() const { return new VisualizationClick(*this); }
+        : wxCommandEvent(winid, eventType), pos(_pos) {
+    spdlog::debug("Construction visclick, is command event {}", IsCommandEvent());
+  }
+    wxEvent* Clone() const override {
+        spdlog::debug("Cloning vis click");
+        return new VisualizationClick(*this);
+    }
     const Point pos;
 };
 

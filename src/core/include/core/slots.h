@@ -239,8 +239,8 @@ struct SlotEngine {
     bool isSameType(const SlotEngine& s) const { return s.type == type; }
     auto getCassette() const { return left.getCassette(); }
     SlotEngine() = default;
-    SlotEngine(SlotModule r, SlotModule l, const std::string& t = "LD")
-        : left{l}, right{r}, type{t} {}
+    SlotEngine(SlotModule r, SlotModule l, std::string t = "LD")
+      : left{l}, right{r}, type{std::move(t)} {}
 
     bool operator==(const SlotEngine& w1) const {
         return right == w1.right && left == w1.left;
@@ -249,8 +249,8 @@ struct SlotEngine {
     template <class Archive>
     void serialize(Archive& archive) {
         archive(cereal::make_nvp("Left", left),
-                cereal::make_nvp("Right", right)
-                    cereal::make_nvp("Type", type));
+                cereal::make_nvp("Right", right),
+                cereal::make_nvp("Type", type));
     }
 };
 struct SlotDepDCDC {

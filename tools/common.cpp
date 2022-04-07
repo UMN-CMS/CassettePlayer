@@ -241,18 +241,17 @@ void processEngines(std::unordered_map<CasSlot, PositionInfo>& ret,
             //            module with location
             //            ({},{})", point.x(),
             //                          point.y());
-            std::string type;
-            if (m.find("O") != std::string::npos &&
-                slot_temp.find("O") != std::string::npos) {
-                type = "LD";
+            std::string etype;
+            if (m.type.find("O") != std::string::npos &&
+                slot_temp.type.find("O") != std::string::npos) {
+                etype = "LD";
             } else {
-                type = "HD"
+                 etype = "HD";
             }
-            std::string type =
-                c.eng.insert({m, SlotEngine(m, slot_temp, type)});
-            c.eng.insert({slot_temp, SlotEngine(m, slot_temp, type)});
+            c.eng.insert({m, SlotEngine(m, slot_temp, etype)});
+            c.eng.insert({slot_temp, SlotEngine(m, slot_temp, etype)});
             point = PositionInfo({row.x0, row.y0}, std::atan(diff.second / diff.first));
-            ret.insert({SlotEngine(m, slot_temp, type), point});
+            ret.insert({SlotEngine(m, slot_temp, etype), point});
         }
     }
 }
