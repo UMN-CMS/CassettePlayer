@@ -251,6 +251,7 @@ void processEngines(std::unordered_map<CasSlot, PositionInfo>& ret,
             std::string type =
                 c.eng.insert({m, SlotEngine(m, slot_temp, type)});
             c.eng.insert({slot_temp, SlotEngine(m, slot_temp, type)});
+            point = PositionInfo({row.x0, row.y0}, std::atan(diff.second / diff.first));
             ret.insert({SlotEngine(m, slot_temp, type), point});
         }
     }
@@ -270,11 +271,10 @@ void processWagons(std::unordered_map<CasSlot, PositionInfo>& ret, Channel& c) {
 
             auto diff = rotfactor * (pos_of_eng.p - pos_of_mod.p);
 
-            realpos = pos_of_eng;
-            if (row.wag_name[0] == 'E' &&
-                row.wag_name.find("2") != std::string::npos)
-                realpos.p = pos_of_mod.p - diff;
-            else if (row.wag_name.find("E") != std::string::npos)
+                realpos = pos_of_eng;
+                //if (row.wag_name[0] == 'E' && row.wag_name.find("2") != std::string::npos)
+                //  realpos.p = pos_of_mod.p - diff  ;
+            if (row.wag_name.find("E")  != std::string::npos)
                 realpos = pos_of_mod;
             else if (row.wag_name.find("W") != std::string::npos)
                 realpos = pos_of_eng;

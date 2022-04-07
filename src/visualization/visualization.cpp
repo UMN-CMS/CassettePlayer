@@ -9,13 +9,14 @@
 
 #include "drawables.h"
 
+wxDEFINE_EVENT(VIS_FRAME_LEFT_DOWN, VisualizationClick);
+
 BEGIN_EVENT_TABLE(VisualizationCanvas, wxPanel)
 EVT_PAINT(VisualizationCanvas::OnPaint)
 EVT_CHAR(VisualizationCanvas::OnKey)
 EVT_MOUSE_EVENTS(VisualizationCanvas::OnMouse)
 END_EVENT_TABLE()
 
-wxDEFINE_EVENT(VIS_FRAME_LEFT_DOWN, VisualizationClick);
 
 std::vector<std::pair<LayerKeyType, std::function<bool(DrawableCasElement*)>>>
 createMap() {
@@ -52,9 +53,11 @@ VisualizationCanvas::VisualizationCanvas(wxWindow* parent, wxWindowID id,
                                          const wxPoint& pos, const wxSize& size)
     : wxPanel(parent, id, pos, size) {
     id_map = createMap();
+    Bind(VIS_FRAME_LEFT_DOWN, [](VisualizationClick& e){spdlog::debug("Clicked registerd");});
     for (const auto& p : id_map) {
         arrangement.push_back({p.first, true});
     }
+
 }
 
 void VisualizationCanvas::render(wxGraphicsContext* gc, wxDC& dc) {
@@ -136,7 +139,7 @@ void VisualizationCanvas::OnMouse(wxMouseEvent& e) {
     if (e.LeftUp() && !e.Dragging()) {
         VisualizationClick event(VIS_FRAME_LEFT_DOWN, GetId(), {cur_x, cur_y});
         event.SetEventObject(this);
-        wxPostEvent(this,event);
+        ProcessWindowEvent(event);
         spdlog::debug("Left click visualization frame at pos ({},{}) in visframe with id {}", cur_x,
                       cur_y, GetId());
         auto hits = hit(cur_x, cur_y);
@@ -277,6 +280,7 @@ void VisualizationCanvas::makeFocus(std::size_t i) {
 }
 
 void VisualizationCanvas::makeSelected(DrawableCasElement* d) {
+
     for (DrawPair& pair : elements) {
         pair.second.is_selected = (d == pair.first);
     }
@@ -286,6 +290,7 @@ void VisualizationCanvas::makeSelected(DrawableCasElement* d) {
 }
 
 void VisualizationCanvas::makeSelected(const CasSlot& c) {
+
     auto f = std::find_if(elements.begin(), elements.end(),
                           [c](auto&& x) { return x.first->cas_slot == c; });
     if (f == std::end(elements)) {

@@ -15,8 +15,8 @@
 // #include "geometry/vmath.h"
 class VisualizationClick : public wxCommandEvent {
    public:
-    VisualizationClick(wxEventType eventType, int winid, const Point& pos)
-        : wxCommandEvent(winid, eventType), pos(pos) {}
+  VisualizationClick(wxEventType eventType, int winid, const Point& _pos)
+        : wxCommandEvent(winid, eventType), pos(_pos) {}
     virtual wxEvent* Clone() const { return new VisualizationClick(*this); }
     const Point pos;
 };
