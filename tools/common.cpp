@@ -270,8 +270,7 @@ void processWagons(std::unordered_map<CasSlot, PositionInfo>& ret, Channel& c) {
             PositionInfo realpos;
 
             auto diff = rotfactor * (pos_of_eng.p - pos_of_mod.p);
-
-                realpos = pos_of_eng;
+            realpos = pos_of_eng;
                 //if (row.wag_name[0] == 'E' && row.wag_name.find("2") != std::string::npos)
                 //  realpos.p = pos_of_mod.p - diff  ;
             if (row.wag_name.find("E")  != std::string::npos)
