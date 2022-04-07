@@ -38,9 +38,9 @@ std::vector<Row> extractRows(const std::string& file) {
     GET_COLF(isEngine, bool, [](const std::string& in, bool& b) {
         b = (in.find('T') != std::string::npos);
     });
-     GET_COLF(isDepDCDC, bool, [](const std::string& in, bool& b) {
-         b = (in.find('T') != std::string::npos);
-     });
+    GET_COLF(isDepDCDC, bool, [](const std::string& in, bool& b) {
+        b = (in.find('T') != std::string::npos);
+    });
     GET_COL(u, int);
     GET_COL(v, int);
     GET_COL(plane, std::size_t);
@@ -152,8 +152,8 @@ void processModules(std::unordered_map<CasSlot, PositionInfo>& ret,
         }
         auto point = PositionInfo({row.x0, row.y0}, angle);
         ret.insert({slot, point});
-        if(row.dep_dcdc){
-          ret.insert({SlotDepDCDC(slot), point });
+        if (row.dep_dcdc) {
+            ret.insert({SlotDepDCDC(slot), point});
         }
     }
 }
@@ -241,9 +241,17 @@ void processEngines(std::unordered_map<CasSlot, PositionInfo>& ret,
             //            module with location
             //            ({},{})", point.x(),
             //                          point.y());
-            c.eng.insert({m, SlotEngine(m, slot_temp)});
-            c.eng.insert({slot_temp, SlotEngine(m, slot_temp)});
-            ret.insert({SlotEngine(m, slot_temp), point});
+            std::string type;
+            if (m.find("O") != std::string::npos &&
+                slot_temp.find("O") != std::string::npos) {
+                type = "LD";
+            } else {
+                type = "HD"
+            }
+            std::string type =
+                c.eng.insert({m, SlotEngine(m, slot_temp, type)});
+            c.eng.insert({slot_temp, SlotEngine(m, slot_temp, type)});
+            ret.insert({SlotEngine(m, slot_temp, type), point});
         }
     }
 }
@@ -262,12 +270,13 @@ void processWagons(std::unordered_map<CasSlot, PositionInfo>& ret, Channel& c) {
 
             auto diff = rotfactor * (pos_of_eng.p - pos_of_mod.p);
 
-                realpos = pos_of_eng;
-            if (row.wag_name[0] == 'E' && row.wag_name.find("2") != std::string::npos)
-              realpos.p = pos_of_mod.p - diff  ;
-            else if (row.wag_name.find("E")  != std::string::npos)
+            realpos = pos_of_eng;
+            if (row.wag_name[0] == 'E' &&
+                row.wag_name.find("2") != std::string::npos)
+                realpos.p = pos_of_mod.p - diff;
+            else if (row.wag_name.find("E") != std::string::npos)
                 realpos = pos_of_mod;
-            else if (row.wag_name.find("W")  != std::string::npos)
+            else if (row.wag_name.find("W") != std::string::npos)
                 realpos = pos_of_eng;
             auto point =
                 PositionInfo(realpos.p, std::atan(diff.second / diff.first));

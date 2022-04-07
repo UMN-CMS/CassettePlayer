@@ -230,22 +230,27 @@ struct SlotNull {
 struct SlotEngine {
     SlotModule left;
     SlotModule right;
+    std::string type = "LD";
+
     std::string toString() const {
         return fmt::format("Engine between modules {} {}", left.toString(),
                            right.toString());
     }
+    bool isSameType(const SlotEngine& s) const { return s.type == type; }
     auto getCassette() const { return left.getCassette(); }
     SlotEngine() = default;
-    SlotEngine(SlotModule r, SlotModule l) : left{l}, right{r} {}
+    SlotEngine(SlotModule r, SlotModule l, const std::string& t = "LD")
+        : left{l}, right{r}, type{t} {}
 
     bool operator==(const SlotEngine& w1) const {
         return right == w1.right && left == w1.left;
     }
-    HASHABLE(left, right)
+    HASHABLE(left, right, type)
     template <class Archive>
     void serialize(Archive& archive) {
         archive(cereal::make_nvp("Left", left),
-                cereal::make_nvp("Right", right));
+                cereal::make_nvp("Right", right)
+                    cereal::make_nvp("Type", type));
     }
 };
 struct SlotDepDCDC {
