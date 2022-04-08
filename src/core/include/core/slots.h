@@ -233,6 +233,7 @@ struct SlotEngine {
     std::string type = "LD";
 
     std::string toString() const {
+      return fmt::format("Engine({},{},{},{})", left.u,left.v, right.u ,right.v );
         return fmt::format("Engine between modules {} {}", left.toString(),
                            right.toString());
     }

@@ -103,11 +103,12 @@ std::string Instruction::toString() const {
         {OpType::INSERT_COMPONENT, "Insert component"},
         {OpType::REMOVE_COMPONENT, "Remove component"},
     };
-    if (op_type != OpType::EMPTY) {
+    if(description.empty()){
         return fmt::format("{} {}", op_name_map.at(op_type),
                            (cas_slot) ? cas_slot->toString() : std::string(""));
     } else {
-        return description;
+      return fmt::format(description,(fmt::arg("slot",
+                                               (cas_slot) ? cas_slot->toString() : std::string(""))));
     }
 }
 

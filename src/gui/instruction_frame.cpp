@@ -382,6 +382,8 @@ void InstructionFrame::onCompleteButtonPressed(wxCommandEvent& WXUNUSED(e)) {
         Refresh();
         current_instruct->setNewInstruction(
             current_instruct->getCurrentValues().first);
+    vis_frame->Update();
+    vis_frame->Refresh();
         op_record_panel->Update();
     }
 }
