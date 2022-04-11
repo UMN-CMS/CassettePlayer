@@ -50,5 +50,22 @@ Please switch to debug mode for development, by changing RELEASE to DEBUG.
 
 
 
+* Todo 
+
+There are a wide array of features and foxes, both on the backend and frontend, I would like to add.
+
+** Backend
+- [ ] Rework the current Slot architecture to be more flexibile. Current possibilities are a type erased AssemblySlot, or implementing some sort of artificial class system during runtime. The latter may actually improve performance if done correctly.
+- [ ] Add more flexibility with serializers, json perhaps. 
+- [ ] Comment code. 
+
+** Frontend
+- [ ] Improved subassemblies
+- [ ] Need to add the time to the operation
+- [ ] Fix wierd issue where custom events are not propagating from the visualization frame.
+- [ ] Report of components needed for Cassette.
+- [ ] Add multi-cassette features, better saving, etc.
+- [ ] Finish [[file:tools/pathmaker/][PathMaker]]
+- [ ] Better system for writing instructions, possibly using the current gui tools.
 
 

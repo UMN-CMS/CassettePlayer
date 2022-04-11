@@ -384,7 +384,7 @@ void InstructionFrame::onCompleteButtonPressed(wxCommandEvent& WXUNUSED(e)) {
             current_instruct->getCurrentValues().first);
     vis_frame->Update();
     vis_frame->Refresh();
-        op_record_panel->Update();
+    op_record_panel->Update();
     }
 }
 void InstructionFrame::onNextButtonPressed(wxCommandEvent& WXUNUSED(e)) {
