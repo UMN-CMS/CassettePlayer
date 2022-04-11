@@ -124,7 +124,7 @@ Create a prototype of an application with the following goals:
 :BEAMER_env: onlyenv
 :END:
 - Highly flexible assembly helper and visualizer. 
-- Helps with logistical and basic assembly tasks when needed, but be unobtrusive to those who will be doing the actual assembly.
+- Helps with logistical and basic assembly tasks when needed, but remains relatively unobtrusive to those who will be doing the actual assembly.
 
 ** Images                                                        :B_onlyenv:
 :PROPERTIES:
@@ -182,8 +182,8 @@ Create a prototype of an application with the following goals:
 
 
 * Workflow Description: Post-Assembly
-- Access to a complete record of the assembly process
-- Exact record of where each component was placed, for later use in a database.
+- Access to a complete, future-proof record of the assembly process
+- Exact knowledge of where each component was placed, for later use in a database.
 
 
 * Workflow In Action
@@ -212,6 +212,15 @@ Scan Barcode
 Fully Recorded
 #+ATTR_LATEX: :width \textwidth
 [[file:data/scan2.png]]
+** Visualization Updates
+:PROPERTIES:
+:BEAMER_env: onlyenv
+:BEAMER_ACT: <4>
+:END:
+Visualization updates to show placed components.
+#+ATTR_LATEX: :width \textwidth
+[[file:data/filled.png]]
+
 
 
 
