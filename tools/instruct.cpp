@@ -39,7 +39,7 @@ void makeOneCas(CasSlot main_cas, const std::vector<CasSlot>& slots,
     //    insmgr.instructions.push_back(wagons_root);
     insmgr.addChild(main_root, modules_root);
     insmgr.addChild(main_root, eng_wag_root);
-    insmgr.addChild(main_root, place_ew_root);
+    //insmgr.addChild(main_root, place_ew_root);
     //insmgr.addChild(main_root, dcdc_root);
 
     int i = 0;

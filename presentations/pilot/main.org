@@ -186,7 +186,7 @@ Create a prototype of an application with the following goals:
 - Exact knowledge of where each component was placed, for later use in a database.
 
 
-* Workflow In Action
+* Single Operation Workflow
 ** Select Instruction                                            
 :PROPERTIES:
 :BEAMER_env: onlyenv
@@ -218,8 +218,26 @@ Fully Recorded
 :BEAMER_ACT: <4>
 :END:
 Visualization updates to show placed components.
-#+ATTR_LATEX: :width \textwidth
+#+ATTR_LATEX: :width 0.85\textwidth
 [[file:data/filled.png]]
+
+* Full Cassette Assembly
+** Workflow
+:PROPERTIES:
+:BEAMER_env: onlyenv
+:BEAMER_ACT: <+>
+:END:
+We can also examine the workflow for an entire Cassette.
+
+#+begin_src sh :results raw :exports results 
+for x in $(gls -v data/CasImages/); do echo """** Workflow
+:PROPERTIES:
+:BEAMER_env: onlyenv
+:BEAMER_ACT: <+>
+:END:
+[[file:data/CasImages/$x]]
+""" ; done
+#+end_src
 
 
 
@@ -230,7 +248,7 @@ Visualization updates to show placed components.
 - The application is agnostic to the exact structure of the cassette, and to the process of assembly. Experts alone must decide how to assemble the cassette and encode this information (possibly with the help of built in tools).
 
 * Development
-CassettePlayer is early in development, and needs input from those who would use it to make it as useful as possible.
+CassettePlayer is early in development, and needs input from those who would use it to make it into something that is actually helpful. 
 
 ** Feedback
 - Changes to the desired workflow?
@@ -239,7 +257,7 @@ CassettePlayer is early in development, and needs input from those who would use
 
 
 * References
-Majority of images taken from Karol Rapacz's talk on HGCAL integration. 
+Cassette images taken from Karol Rapacz's talk on HGCAL integration. 
 
 * Questions and Comments
 \Huge\center Questions and Comments?
