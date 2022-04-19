@@ -29,7 +29,7 @@ There will be substantial challenges, both physical and logistical.
 :BEAMER_ACT: <1->
 :BEAMER_COL: 0.5
 :END:
-- Keep a record of which components have been placed where, through the use of bar codes.
+- Keep a record of which components have been placed where, through the use of bar codes which must be scanned and recorded. 
 - Track the current state of the assembly from day to day.
 - Verify the integrity of each Cassette throughout the process.
 ** Images
@@ -48,9 +48,9 @@ There will be substantial challenges, both physical and logistical.
 :BEAMER_COL: 0.5
 :END:
 #+ATTR_BEAMER: :overlay <+->
-- Mount thousands of modules of distinct types, and ensure the correct shape and width is always chosen
+- Mount thousands of modules of distinct types, and ensure the correct shape and width is always chosen. 
 - Place deported DCDC converters on the correct modules.
-- Identify and use a large variety of different, but often similar components, like wagons and wires
+- Identify and use a large variety of different components: 60+ LD Wagons, 10+ HD Wagons, huge number of paths with different lengths.
 - Run wires and piping correctly through complex paths to the periphery or to the HD region.
 
 ** Images
@@ -75,7 +75,7 @@ There will be substantial challenges, both physical and logistical.
 :BEAMER_ACT: <3>
 :BEAMER_env: onlyenv
 :END:
-[[file:data/lotsawires.png]]
+[[file:data/fibers.jpg]]
 *** Connections                                                 :B_onlyenv:
 :PROPERTIES:
 :BEAMER_ACT: <4>
@@ -240,15 +240,20 @@ for x in $(gls -v data/CasImages/); do echo """** Workflow
 #+end_src
 
 
+* Notes
+ Future versions will include additional steps for wiring and validation for bar codes, as two examples.
 
+ Barcode scanning is flexibly integrated.
 
 * What it is not
-- The application is not a design a tool
-- The application does not decide anything about the assembly process
+- The application is not a design tool.
+- The application does not decide anything about the assembly process.
 - The application is agnostic to the exact structure of the cassette, and to the process of assembly. Experts alone must decide how to assemble the cassette and encode this information (possibly with the help of built in tools).
 
 * Development
-CassettePlayer is early in development, and needs input from those who would use it to make it into something that is actually helpful. 
+CassettePlayer is early in development: needs input from those who would use it to make it into something that is actually helpful. 
+** Status
+The application as shown is just a draft, and nothing is set in stone. Features can be added and removed or changed as desired.
 
 ** Feedback
 - Changes to the desired workflow?
@@ -257,12 +262,11 @@ CassettePlayer is early in development, and needs input from those who would use
 
 
 * References
-Cassette images taken from Karol Rapacz's talk on HGCAL integration. 
+Cassette images taken from Karol Rapacz's talk on HGCAL integration.
+Fiber mapping image from P. Ferreira da Silva et. al's talk on FE-BE optical interconnect.
+
+* Thank You
+\Huge\center Thank you.
 
 * Questions and Comments
 \Huge\center Questions and Comments?
-
-
-
-
-
