@@ -288,6 +288,7 @@ InstructionFrame::InstructionFrame(DataManager* dm, wxFrame* parent,
     createMenuBar();
     Centre(wxBOTH);
     //   Iconize();
+    Bind(VIS_FRAME_COMPONENT_SELECTED, &InstructionFrame::onVisualizationComponentSelect, this);
 }
 
 InstructionFrame::~InstructionFrame() {}
@@ -497,4 +498,16 @@ void InstructionFrame::onPrint(wxCommandEvent& WXUNUSED(e)) {
     frame->Centre(wxBOTH);
     frame->Initialize();
     frame->Show(true);
+}
+
+void InstructionFrame::onVisualizationComponentSelect(ComponentSelectedEvent& e){
+    Instruction* ins = dm->insMgr().getInstructionBySlot(e.slot);
+    spdlog::debug("Selected instruction at {} for slot {}", (void*)ins, e.slot);
+    if (ins) {
+      instructions->SetCurrentItem(fromInstruction(ins));
+        setSubDVRoot(ins);
+        setCurInstPanel(ins);
+        setMiniView(ins);
+        gotoCurrentInstructionInView();
+    }
 }

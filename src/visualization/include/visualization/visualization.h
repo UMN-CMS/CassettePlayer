@@ -13,20 +13,31 @@
 #include "core/slots.h"
 #include "drawables.h"
 // #include "geometry/vmath.h"
-class VisualizationClick : public wxCommandEvent {
+class VisualizationClickEvent : public wxCommandEvent {
    public:
-  VisualizationClick(wxEventType eventType, int winid, const Point& _pos)
-        : wxCommandEvent(winid, eventType), pos(_pos) {
-    spdlog::debug("Construction visclick, is command event {}", IsCommandEvent());
-  }
-    wxEvent* Clone() const override {
-        spdlog::debug("Cloning vis click");
-        return new VisualizationClick(*this);
-    }
     const Point pos;
+  VisualizationClickEvent(wxEventType eventType, int winid, const Point& _pos)
+    : wxCommandEvent(eventType, winid), pos(_pos) {}
+  wxEvent* Clone() const override {
+        spdlog::debug("Cloning vis click");
+        return new VisualizationClickEvent(*this);
+    }
 };
 
-wxDECLARE_EVENT(VIS_FRAME_LEFT_DOWN, VisualizationClick);
+class ComponentSelectedEvent : public wxCommandEvent {
+   public:
+    const CasSlot slot;
+  ComponentSelectedEvent(wxEventType eventType, int winid, const CasSlot& _slot)
+    : wxCommandEvent(eventType, winid), slot(_slot){}
+ 
+    wxEvent* Clone() const override {
+        return new ComponentSelectedEvent(*this);
+    }
+};
+
+wxDECLARE_EVENT(VIS_FRAME_LEFT_DOWN, VisualizationClickEvent);
+wxDECLARE_EVENT(VIS_FRAME_COMPONENT_SELECTED, ComponentSelectedEvent);
+wxDECLARE_EVENT(TESTEVENT, wxCommandEvent);
 
 enum Layer {
     STATIC = 1 << 0,

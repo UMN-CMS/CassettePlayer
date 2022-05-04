@@ -55,3 +55,8 @@ void VisualizationFrame::openLayerSelector() {
 }
 
 void VisualizationFrame::gotoComp(const CasSlot& c) { vc->makeSelected(c); }
+
+void VisualizationFrame::AddPendingEvent(const wxEvent& e){
+  spdlog::debug("EVENT ID {} , command {} ", e.GetId(), e.IsCommandEvent());
+  wxEvtHandler::AddPendingEvent(e);
+}

@@ -18,4 +18,5 @@ class VisualizationFrame : public wxFrame {
                        long style = wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL);
     void openLayerSelector();
     void gotoComp(const CasSlot& c);
+  void AddPendingEvent(const wxEvent&) override;
 };

@@ -9,8 +9,10 @@
 
 #include "drawables.h"
 
-wxDEFINE_EVENT(VIS_FRAME_LEFT_DOWN, VisualizationClick);
-wxDEFINE_EVENT(TESTEVENT,wxCommandEvent);
+//IMPLEMENT_DYNAMIC_CLASS( VisualizationClick,wxEvent )
+wxDEFINE_EVENT(VIS_FRAME_LEFT_DOWN, VisualizationClickEvent);
+wxDEFINE_EVENT(VIS_FRAME_COMPONENT_SELECTED, ComponentSelectedEvent);
+
 
 BEGIN_EVENT_TABLE(VisualizationCanvas, wxPanel)
 EVT_PAINT(VisualizationCanvas::OnPaint)
@@ -54,14 +56,15 @@ VisualizationCanvas::VisualizationCanvas(wxWindow* parent, wxWindowID id,
                                          const wxPoint& pos, const wxSize& size)
     : wxPanel(parent, id, pos, size) {
     id_map = createMap();
-    Bind(TESTEVENT, [](wxCommandEvent& e){spdlog::debug("Clicked registerd");});
     for (const auto& p : id_map) {
         arrangement.push_back({p.first, true});
     }
+    /*
     VisualizationClick event(VIS_FRAME_LEFT_DOWN, GetId(), {0,0});
         event.SetEventObject(this);
         bool ok = ProcessWindowEvent(event);
         spdlog::debug("Processed: {}", ok);
+    */
 
 }
 
@@ -143,20 +146,17 @@ void VisualizationCanvas::OnMouse(wxMouseEvent& e) {
     if (e.LeftDown()) {
     }
     if (e.LeftUp() && !e.Dragging()) {
-        VisualizationClick event(VIS_FRAME_LEFT_DOWN, GetId(), {cur_x, cur_y});
+        VisualizationClickEvent event(VIS_FRAME_LEFT_DOWN, GetId(), {cur_x, cur_y});
         event.SetEventObject(this);
-        wxCommandEvent newevent(VIS_FRAME_LEFT_DOWN, GetId());
-        newevent.SetEventObject(this);
-        ProcessWindowEvent(newevent);
-        spdlog::debug("Left click visualization frame at pos ({},{}) in visframe with id {}", cur_x,
-                      cur_y, GetId());
+        wxPostEvent(GetParent(), event);
         auto hits = hit(cur_x, cur_y);
         if (false && std::size(hits) == 1) {
+
             // hit_dialog.ShowModal();
         } else if (std::size(hits) >= 1) {
-            // auto menu = new wxMenu();
-
-            // PopupMenu(menu);
+          ComponentSelectedEvent event(VIS_FRAME_COMPONENT_SELECTED, GetId(), hits.back()->cas_slot);
+          event.SetEventObject(this);
+          ProcessWindowEvent(event);
         }
     }
     zoom = std::clamp<float>(zoom + e.GetWheelRotation() / 1000.0f, 0.3, 10.0f);

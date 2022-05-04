@@ -89,12 +89,15 @@ class InstructionFrame : public wxFrame {
     void onCurrentInstruction(wxCommandEvent& e);
     void onNextInstruction(wxCommandEvent& e);
 
+
     void onViewSubassembly(wxCommandEvent& e);
     void onChangeUserPress(wxCommandEvent& e);
     void gotoCurrentInstructionInView();
 
     void onPrintPreview(wxCommandEvent& e);
     void onPrint(wxCommandEvent& e);
+
+  void onVisualizationComponentSelect(ComponentSelectedEvent& e);
 
     ~InstructionFrame();
 };

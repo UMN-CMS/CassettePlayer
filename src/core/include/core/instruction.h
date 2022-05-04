@@ -73,6 +73,7 @@ class InstructionManager {
     const std::vector<Instruction*> getDirectChildren(Instruction* inst) const;
     std::vector<Instruction*> getAllChildren(Instruction* inst);
     Instruction* getOneParent(Instruction* inst);
+  Instruction* getInstructionBySlot(const CasSlot& s);
 
     template <typename T>
     bool setRootByType(const T& type) {

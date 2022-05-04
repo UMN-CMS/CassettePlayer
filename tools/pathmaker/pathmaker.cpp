@@ -24,14 +24,15 @@ class MainFrame : public wxFrame {
               long style = wxDEFAULT_FRAME_STYLE | wxTAB_TRAVERSAL);
     void initializeGeometry();
     void drawPath();
-    void onClickVis(VisualizationClick& e);
+    void onClickVis(VisualizationClickEvent& e);
 };
 
-void MainFrame::onClickVis(VisualizationClick& e) {
+void MainFrame::onClickVis(VisualizationClickEvent& e) {
     spdlog::debug("Clicked pos ({},{})", e.pos);
     current_path.push_back(e.pos);
     auto temp = StyledPolygon{current_path, 0xFF0000};
     temp.line_width = 4;
+      spdlog::debug("HERE1");
     if (additions.empty()) {
         additions.emplace_back(
             new DrawableCasElement(PositionInfo{{0, 0}, 0}, Drawable({temp})));
@@ -39,7 +40,9 @@ void MainFrame::onClickVis(VisualizationClick& e) {
         additions[0] = std::unique_ptr<DrawableCasElement>(
             new DrawableCasElement(PositionInfo{{0, 0}, 0}, Drawable({temp})));
     }
+      spdlog::debug("HERE2");
     drawPath();
+      spdlog::debug("HERE3");
 }
 
 void MainFrame::drawPath() {
