@@ -19,8 +19,12 @@ This includes:
 CassettePlayer is primarily a gui app, build using the [[https://www.wxwidgets.org/][wxWidgets]] framework.
 wxWidgets is crossplatform and this application should compile on Mac, Linux, and Windows.
 
+*Warning: For prototpying purposes it is harcoded to examine only the first 30 degree portion of layer 33. This will of course be changed in the future.* 
+
 *Warning:* This app is in development, there may be bugs.
+
 *Warning:* Due to changes in Mac's font handling, you may need version 3.1.5 of the library to run on mac. 
+
 
 
 ** Requirements
@@ -47,17 +51,43 @@ make -j4 -C build
 The main app and all tools should then be compiled into the appropriate directories in the build folder.
 Please switch to debug mode for development, by changing RELEASE to DEBUG.
 
+* Generating Datafiles
+CassettePlayer relies on external data files to describe the geometry, component shapes, and intstructions for the assembly process. There are several built in tools to generate such files.
 
+** Generating Geometry Information
+The information aboput which components are required for each Cassette and where they should be places on the Cassette can be generated using
+#+begin_src sh
+./build/tools/item_point --parse points --outfile points.xml geometry.hgcal.txt
+#+end_src
+This will create a file called points.xml containing the geomtry information.
+** Generating Shape Information
+The information aboput which components are required for each Cassette and where they should be places on the Cassette can be generated using
+#+begin_src sh
+./build/tools/item_point --parse shapes --outfile shapes.xml geometry.hgcal.txt
+#+end_src
+This will create a file called shapes.xml containing the shape information for the available components. 
+** Generating Shape Information
+The information aboput which components are required for each Cassette and where they should be places on the Cassette can be generated using
+#+begin_src sh
+./build/tools/instruct_^Cker --outfile ins.xml geometry.hgcal.txt 
+#+end_src
+This will create a file called ins.xml containing the instruction information based on the geometry information. 
+
+* Running the App
+Once the app is built and the datafiles are created, the app can be run simply with
+#+begin_src sh
+./build/src/App
+#+end_src
 
 
 * Todo 
 
-There are a wide array of features and foxes, both on the backend and frontend, I would like to add.
+There are a wide array of features and fixes, both on the backend and frontend, I would like to add. Notably, for the sake of prototyping speed, there are some subpar practices, especially with regard to the underlying data structures.
 
 ** Backend
-- [ ] Rework the current Slot architecture to be more flexibile. Current possibilities are a type erased AssemblySlot, or implementing some sort of artificial class system during runtime. The latter may actually improve performance if done correctly.
+- [ ] (!!!!) Rework the current Slot architecture to be more flexibile. Current possibilities are a type erased AssemblySlot, or implementing some sort of artificial class system during runtime. The latter may actually improve performance if done correctly.
 - [ ] Add more flexibility with serializers, json perhaps. 
-- [ ] Comment code. 
+- [ ] Comment code.
 
 ** Frontend
 - [ ] Improved subassemblies
@@ -67,5 +97,9 @@ There are a wide array of features and foxes, both on the backend and frontend, 
 - [ ] Add multi-cassette features, better saving, etc.
 - [ ] Finish [[file:tools/pathmaker/][PathMaker]]
 - [ ] Better system for writing instructions, possibly using the current gui tools.
-
+- [ ] Fix event issue so clicking components actually works
+  
+** General
+- [ ] List components for given Cassette, and cross reference this with available inventory.
+- [ ] Improve information display for components (maybe popups within the display)
 
