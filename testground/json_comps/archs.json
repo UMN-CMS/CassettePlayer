@@ -1,0 +1,35 @@
+{
+    "Archetypes": {
+        "Engine": {
+            "Fields": {
+                "Right": "Module",
+                "Left": "Module"
+            },
+            "Hashable Fields": [
+            ],
+            "SimpleFormat": "",
+            "ReprFormat": ""
+        },
+        "Module": {
+            "Fields": {
+                "V": "int",
+                "U": "int"
+            },
+            "Hashable Fields": [
+                "V"
+            ],
+            "SimpleFormat": "",
+            "ReprFormat": ""
+        },
+        "Wagon": {
+            "Fields": {
+                "Engine": "Engine",
+                "Orientation": "int",
+                "Type": "str"
+            },
+            "Hashable Fields": [],
+            "SimpleFormat": "",
+            "ReprFormat": ""
+        }
+    }
+}

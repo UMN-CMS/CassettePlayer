@@ -1,0 +1,45 @@
+{
+    "value0": [
+        {
+            "Handle": 3,
+            "Archetype": "Module",
+            "Data": {
+                "U": 10,
+                "V": 8
+            }
+        },
+        {
+            "Handle": 2,
+            "Archetype": "Engine",
+            "Data": {
+                "Right": 2,
+                "Left": 1
+            }
+        },
+        {
+            "Handle": 1,
+            "Archetype": "Module",
+            "Data": {
+                "V": 3,
+                "U": 4
+            }
+        },
+        {
+            "Handle": 0,
+            "Archetype": "Module",
+            "Data": {
+                "V": 2,
+                "U": 1
+            }
+        },
+        {
+            "Handle": 4,
+            "Archetype": "Wagon",
+            "Data": {
+                "Engine": 2,
+                "Orientation": 3,
+                "Type": "Elbow"
+            }
+        }
+    ]
+}
