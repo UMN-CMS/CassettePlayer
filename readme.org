@@ -1,6 +1,8 @@
 #+LATEX_HEADER: \makeatletter\@ifclassloaded{beamer}{}{\usepackage[margin=1in]{geometry}}\makeatother
 #+OPTIONS: toc:1
 
+*This application has moved to the cern gitlab*
+
 * CassettePlayer
 CassettePlayer is a tool designed to help in the assembly of the cassettes for the CMS HGCAL upgrade.
 
